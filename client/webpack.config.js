@@ -23,7 +23,7 @@ module.exports = () => {
         template: './index.html',
         title: 'Text Editor'
       }),
-      new CssExtractPlugin(),
+      new MiniCssExtractPlugin(),
       new InjectManifest({
         swSrc: path.resolve(__dirname, './src-sw.js'),
         swDest: path.resolve(__dirname, '../client/src-sw.js')
@@ -58,7 +58,7 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/i,
-          use: [CssExtractPlugin.loader, 'css-loader'],
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
           test: /\.m?js$/,
