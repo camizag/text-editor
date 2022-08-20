@@ -1,8 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
-
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 // TODO: Add CSS loaders and babel to webpack.
 
@@ -20,20 +21,21 @@ module.exports = () => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'Jate'
+        title: 'Text Editor'
       }),
+      new CssExtractPlugin(),
       new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'src-sw.js',
+        swSrc: path.resolve(__dirname, './src-sw.js'),
+        swDest: path.resolve(__dirname, '../client/src-sw.js')
       }),
       new WebpackPwaManifest({
         fingerprints: false,
         inject: true,
-        name: 'Text editor',
+        name: 'Jate Text Editor',
         short_name: 'Jate',
-        description: 'Basically a note taker',
-        background_color: '#32332c',
-        theme_color: '#2768b8',
+        description: 'Text editor',
+        background_color: '#2D2E28',
+        theme_color: '#37B1E4',
         start_url: '/',
         publicPath: '/',
         icons: [
@@ -44,13 +46,19 @@ module.exports = () => {
           },
         ],
       }),
+      new CopyWebpackPlugin({ 
+        patterns: [ 
+         // relative path is from src
+         { from: './favicon.ico' }, 
+        ]
+     })
     ],
 
     module: {
       rules: [
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
+          use: [CssExtractPlugin.loader, 'css-loader'],
         },
         {
           test: /\.m?js$/,
